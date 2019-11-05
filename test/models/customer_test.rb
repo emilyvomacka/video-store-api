@@ -2,15 +2,20 @@ require "test_helper"
 
 describe Customer do
   let (:m1) { movies(:m1) }
+  let (:m2) { movies(:m2) }
   let (:c1) { customers(:c1) }
+  let (:c2) { customers(:c2) }
   let (:r1) { rentals(:r1) }
+  let (:r2) { rentals(:r2) }
   
   describe "RELATION" do
     describe "has many rentals" do
-      it "nominal" do
+      it "can get correct rentals count for valid customer" do
+        expect(c1.rentals.count).must_equal ???
       end
       
-      it "edge" do
+      it "if no rentals, return 0 rental count" do
+        expect(c2.rentals.count).must_equal ???
       end
     end
     
