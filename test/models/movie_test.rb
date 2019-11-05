@@ -32,20 +32,34 @@ describe Movie do
   
   describe "VALIDATION" do
     ### NONE SO FAR
-    it "nominal" do
+    describe "nominal" do
+      it "creates a movie when all required fields are present and correct" do
+        expect{Movie.create(title: "test", inventory: 3)}.must_change "Movie.count", 1
+      end
+      
+      describe "edge" do
+        it "won't create a movie without a title" do 
+          expect{Movie.create(title: nil, inventory: 3)}.wont_change "Movie.count"
+        end 
+
+        it "won't create a movie without an inventory" do 
+          expect{Movie.create(title: "test", inventory: nil)}.wont_change "Movie.count"
+        end 
+
+        it "won't create movie with negative inventory" do 
+          expect{Movie.create(title: "test", inventory: -25)}.wont_change "Movie.count"
+        end 
+      end
     end
     
-    it "edge" do
-    end
-  end
-  
-  describe "CUSTOM METHODS" do
-    ### NONE SO FAR
-    it "nominal" do
+    describe "CUSTOM METHODS" do
+      ### NONE SO FAR
+      it "nominal" do
+      end
+      
+      it "edge" do
+      end
     end
     
-    it "edge" do
-    end
   end
-  
-end
+end 
