@@ -7,15 +7,16 @@ describe Customer do
   let (:c2) { customers(:c2) }
   let (:r1) { rentals(:r1) }
   let (:r2) { rentals(:r2) }
+  let (:c3) { customers(:c3) }
   
   describe "RELATION" do
     describe "has many rentals" do
       it "can get correct rentals count for valid customer" do
-        expect(c1.rentals.count).must_equal ???
+        expect(c1.rentals.count).must_equal 1
       end
       
       it "if no rentals, return 0 rental count" do
-        expect(c2.rentals.count).must_equal ???
+        expect(c3.rentals.count).must_equal 0
       end
     end
     

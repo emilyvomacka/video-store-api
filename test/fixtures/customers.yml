@@ -15,3 +15,12 @@ c2:
   postal_code: 12345
   phone: 1-800-diddly
   registered_at: 2018-12-25
+
+c3:
+  name: ted flanders
+  address: 124 real st
+  city: springfield
+  state: IL
+  postal_code: 12345
+  phone: 1-800-diddly
+  registered_at: 2018-12-25
