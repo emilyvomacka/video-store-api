@@ -1,0 +1,14 @@
+r1:
+  customer: c1
+  movie: m1
+  returned: true
+  checkout_date: 2019-10-03
+  due_date: 2019-10-10
+
+r2:
+  customer: c2
+  movie: m1
+  returned: false
+  checkout_date: 2019-11-01
+  due_date: 2019-11-08
+

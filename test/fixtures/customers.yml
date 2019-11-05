@@ -1,0 +1,17 @@
+c1:
+  name: bart simpson
+  address: 123 fake st 
+  city: springfield
+  state: IL
+  postal_code: 12345
+  phone: 1-800-whatevr
+  registered_at: 2019-01-01
+
+c2:
+  name: ned flanders
+  address: 124 fake st
+  city: springfield
+  state: IL
+  postal_code: 12345
+  phone: 1-800-diddly
+  registered_at: 2018-12-25

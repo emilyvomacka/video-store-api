@@ -1,5 +1,11 @@
 m1:
   title: the shining
   overview: scary movie about a hotel
-  integer: 5
+  inventory: 5
   release_date: 1972-10-31
+
+m2:
+  title: a burns for all seasons
+  overview: mr. burns' propaganda film
+  inventory: 3
+  release_date: 1990-01-01
