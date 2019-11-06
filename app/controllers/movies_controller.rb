@@ -21,7 +21,7 @@ class MoviesController < ApplicationController
     movie.available_inventory = movie.inventory
     
     if movie.save
-      render json: { msg: "Movie #{movie.title.capitalize} added to database"}, status: :accepted
+      render json: { id: Movie.last.id, msg: "Movie #{Movie.last.title.capitalize} added to database"}, status: :ok
     else
       render json: { errors: "Cannot add movie", error_msgs: movie.errors.full_messages }, status: :bad_request
     end
@@ -30,7 +30,7 @@ class MoviesController < ApplicationController
   private
   
   def new_params
-    return params.require(:movie).permit(:id, :title, :overview, :release_date, :inventory)
+    return params.permit(:id, :title, :overview, :release_date, :inventory)
   end
   
 end
