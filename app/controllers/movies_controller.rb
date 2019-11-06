@@ -21,10 +21,11 @@ class MoviesController < ApplicationController
     movie.avail_inventory = movie.inventory
     
     if movie.save
-      render json: { msg: "Movie #{movie.title.capitalize} added to database"}, status: :accepted
+      render json: { msg: "Movie #{movie.title.capitalize} added to database", id: "#{movie.id}" }, status: :ok
     else
       render json: { errors: "Cannot add movie", error_msgs: movie.errors.full_messages }, status: :bad_request
     end
+    return movie.id
   end
   
   private
