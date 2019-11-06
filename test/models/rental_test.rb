@@ -32,13 +32,19 @@ describe Rental do
   
   describe "VALIDATION" do
     it "can add new Rental instance, if given valid customer & movie instances" do
-      
+      expect{Rental.create(customer: Customer.first, movie: Movie.last)}.must_change "Rental.count", 1
     end
     
     it "won't add new Rental instance if given bad customer instance" do
+      before_count = Rental.count
+      expect{Rental.create(customer: "garbage", movie: Movie.last)}.must_raise ActiveRecord::AssociationTypeMismatch
+      expect(Rental.count).must_equal before_count
     end
     
     it "won't add new Rental instance if given bad movie instance" do
+      before_count = Rental.count
+      expect{Rental.create(customer: Customer.first, movie: "garbage")}.must_raise ActiveRecord::AssociationTypeMismatch
+      expect(Rental.count).must_equal before_count
     end
   end
   
