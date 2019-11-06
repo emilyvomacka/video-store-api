@@ -1,5 +1,5 @@
 class CustomersController < ApplicationController
-CUSTOMER_KEYS = [:id, :name, :registered_at, :postal_code, :phone]
+CUSTOMER_KEYS = [:id, :name, :registered_at, :postal_code, :phone, :movies_checked_out_count]
 #return to :movies_checked_out_count
 
   def index
