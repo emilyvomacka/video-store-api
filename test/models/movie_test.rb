@@ -52,15 +52,16 @@ describe Movie do
         end 
       end
     end
-    
-    describe "CUSTOM METHODS" do
-      ### NONE SO FAR
-      it "nominal" do
-      end
-      
-      it "edge" do
-      end
+  end 
+  
+  describe "CUSTOM METHODS" do
+    ### NONE SO FAR
+    it "nominal" do
     end
     
+    it "edge" do
+    end
   end
+  
+  
 end 
