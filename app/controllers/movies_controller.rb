@@ -17,11 +17,11 @@ class MoviesController < ApplicationController
   end
   
   def create
-    movie = Movie.new(new_params)
+    movie = Movie.new(movie_params)
     movie.available_inventory = movie.inventory
     
     if movie.save
-      render json: { msg: "Movie #{movie.title.capitalize} added to database", id: "#{movie.id}" }, status: :ok
+      render json: { msg: "Movie #{movie.title.capitalize} added to database", id: Movie.last.id }, status: :ok
     else
       render json: { errors: "Cannot add movie", error_msgs: movie.errors.full_messages }, status: :bad_request
     end
@@ -30,8 +30,8 @@ class MoviesController < ApplicationController
   
   private
   
-  def new_params
-    return params.require(:movie).permit(:title, :overview, :release_date, :inventory)
+  def movie_params
+    return params.permit(:id, :title, :overview, :release_date, :inventory)
   end
   
 end
