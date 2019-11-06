@@ -46,6 +46,7 @@ class RentalsController < ApplicationController
       this_customer.update(movies_checked_out_count: this_customer.movies_checked_out_count - 1)
       this_movie = rental.movie
       this_movie.update(available_inventory: this_movie.available_inventory + 1)
+      this_movie.update(returned: true)
       render json: { msg: "Rental id#{rental.id}: #{rental.movie.title} has been returned." }, status: :ok
     end 
   end
