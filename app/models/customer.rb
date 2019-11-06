@@ -4,4 +4,8 @@ class Customer < ApplicationRecord
 
   validates :name, presence: :true 
   validates :phone, presence: :true, uniqueness: :true
+
+  def movies_checked_out_count 
+    return self.movies.count
+  end 
 end
