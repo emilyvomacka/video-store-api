@@ -46,11 +46,11 @@ describe Customer do
       expect{Customer.create(name: nil, phone: "333")}.wont_change "Customer.count"
     end 
 
-    it "fails to create a new customer without phone number" do
+    it "fails to create a customer without phone number" do
       expect{Customer.create(name: "test", phone: nil)}.wont_change "Customer.count"
     end 
 
-    it "fails to create a new customer without unique phone number" do 
+    it "fails to create a customer without unique phone number" do 
       Customer.create!(name: "test", phone: "333")
       expect{Customer.create(name: "hi", phone: "333")}.wont_change "Customer.count"
     end 
