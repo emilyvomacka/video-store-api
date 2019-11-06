@@ -1,7 +1,16 @@
 require "test_helper"
 
 describe CustomersController do
-  # it "does a thing" do
-  #   value(1+1).must_equal 2
-  # end
+  
+  describe "INDEX" do
+    it "basic test w/ no parameters, if applicable" do
+    end
+    
+    it "nominal case: check status and request body" do
+    end
+    
+    it "edge case: check status and request body" do
+    end
+  end
+  
 end

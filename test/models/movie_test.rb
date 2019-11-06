@@ -7,25 +7,27 @@ describe Movie do
   let (:c2) { customers(:c2) }
   let (:r1) { rentals(:r1) }
   let (:r2) { rentals(:r2) }
+  let (:actual_m1_rentals) { rentals.select { |r| r.movie == m1 } }
+  let (:actual_m2_rentals) { rentals.select { |r| r.movie == m2 } }
   
   describe "RELATION" do
     describe "has many rentals" do
       it "can get correct rentals count for valid movie" do
-        expect(m1.rentals.count).must_equal 2
+        expect(m1.rentals.count).must_equal actual_m1_rentals.count
       end
       
       it "if no rentals, return 0 rental count" do
-        expect(m2.rentals.count).must_equal 0
+        expect(m2.rentals.count).must_equal actual_m2_rentals.count
       end
     end
     
     describe "has many customers, thru rentals" do
       it "can get correct customers count for valid movie" do
-        expect(m1.customers.count).must_equal 2
+        expect(m1.customers.count).must_equal actual_m1_rentals.count
       end
       
       it "if no rentals, return 0 customer count" do
-        expect(m2.rentals.count).must_equal 0
+        expect(m2.customers.count).must_equal actual_m2_rentals.count
       end
     end
   end
