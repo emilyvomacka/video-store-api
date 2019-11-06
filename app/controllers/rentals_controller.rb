@@ -32,15 +32,27 @@ class RentalsController < ApplicationController
   end
   
   def check_in
-    ### Modifying existing rental record flip status to returned: true
-    # CHRIS SAID... the client wanted a POST, even though we're doing UPDATE here,
-    # just stick to the client's specs...
-    
+    rental = Rental.find_by(movie_id: rental_params[:movie_id].to_i, customer_id: rental_params[:customer_id].to_i)
+    # render json: { msg: "Rental id#{rental.id}: #{rental.movie.title} has been rented by #{rental.customer.name}." }, status: :ok
+    # return 
+    if rental.nil?
+      render json: { errors: "Rental doesn't exist" }, status: :bad_request
+      return 
+    elsif rental.returned == true
+      render json: { errors: "Rental has already been returned" }, status: :bad_request
+      return
+    else 
+      this_customer = rental.customer
+      this_customer.update(movies_checked_out_count: this_customer.movies_checked_out_count - 1)
+      this_movie = rental.movie
+      this_movie.update(available_inventory: this_movie.available_inventory + 1)
+      render json: { msg: "Rental id#{rental.id}: #{rental.movie.title} has been returned." }, status: :ok
+    end 
   end
   
   private
   
   def rental_params
-    return params.require(:rental).permit(:movie_id, :customer_id)
+    return params.permit(:movie_id, :customer_id)
   end
 end
