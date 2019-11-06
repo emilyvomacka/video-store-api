@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(version: 2019_11_05_232104) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "release_date"
-    t.integer "avail_inventory"
+    t.integer "available_inventory"
   end
 
   create_table "rentals", force: :cascade do |t|
