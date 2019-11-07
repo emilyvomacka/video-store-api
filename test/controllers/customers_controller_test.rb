@@ -11,7 +11,7 @@ describe CustomersController do
       check_response(expected_type: Array)
     end
     
-    it "responds with an array of customer hashes" do
+    it "if customers exist, responds with an array of customer hashes" do
       get customers_path
       
       body = JSON.parse(response.body)
@@ -30,7 +30,6 @@ describe CustomersController do
       
       get customers_path
       
-      check_response(expected_type: Array)
       body = JSON.parse(response.body)
       expect(body.count).must_equal Customer.count
       expect(body).must_equal []
