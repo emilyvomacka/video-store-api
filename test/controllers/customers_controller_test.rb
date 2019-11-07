@@ -40,11 +40,49 @@ describe CustomersController do
     describe "additional query parameters" do
       describe "does query parameter sort work?" do
         it "with valid input, respond w/ correct JSON and status" do
+          get customers_path, params: { sort: "name" }
+          
+          check_response(expected_type: Array)
+          
+          body = JSON.parse(response.body)
+          expect(body.count).must_equal Customer.count
+          
+          body.each do |customer|
+            expect(customer).must_be_instance_of Hash
+            expect(customer.keys.sort).must_equal CUSTOMER_KEYS
+          end
+          
+          # checking alphabetical order
+          (body.count-1).times do |i|
+            assert(body[i]["name"] < body[i+1]["name"])
+          end
         end
         
         it "with invalid inputs, respond w/ default JSON of all customers and success status" do 
+          # I did NOT do input validation, I could've ... but I didn't lol
+          # this is expecting the same result as the describe "basic index" block
+          get customers_path, params: { sort: "garbage" }
+          
+          body = JSON.parse(response.body)
+          
+          expect(body.count).must_equal Customer.count
+          
+          body.each do |customer|
+            expect(customer).must_be_instance_of Hash
+            expect(customer.keys.sort).must_equal CUSTOMER_KEYS
+          end
         end
 
+        it "if no customers exist, responds with check status and request body" do
+          Customer.destroy_all
+          
+          get customers_path, params: { sort: "garbage"}
+          
+          body = JSON.parse(response.body)
+          expect(body.count).must_equal Customer.count
+          expect(body).must_equal []
+        end
+        
       end
       
       describe "does query parameter combo n&p work?" do
@@ -53,7 +91,7 @@ describe CustomersController do
         
         it "with invalid inputs, respond w/ default JSON of all customers and success status" do 
         end
-
+        
       end
       
       describe "does query parameter super combo of sort AND n&p work?" do
@@ -62,7 +100,7 @@ describe CustomersController do
         
         it "with invalid inputs, respond w/ default JSON of all customers and success status" do 
         end
-
+        
       end
       
       
