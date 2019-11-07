@@ -9,6 +9,7 @@ class RentalsController < ApplicationController
     
     # does this movie (if existing) even have available_inventory?
     ### EMILY!!! Can we make this part of Rental model validations?  IDK if it's bad SRP practice...
+    ### I think we'll have to look into custom model validations if we do that...
     movie = new_rental.movie
     if movie && movie.available_inventory <= 0
       render json: { errors: "Cannot make a rental because movie #{movie.title.capitalize} ran out of copies"}, status: :bad_request

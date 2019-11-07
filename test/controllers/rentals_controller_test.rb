@@ -13,17 +13,10 @@ describe RentalsController do
         @rental_count_before = Rental.count
         @m1_avail_inv_before = m1.available_inventory
         @c3_movie_count_before = c3.movies_checked_out_count
-        # puts "\nBEFORE"
-        # p m1
-        # p c3
         post check_out_path, params: {movie_id: m1.id, customer_id: c3.id}
         
-        # m1B = Movie.find_by(id: m1.id)
-        # c3B = Customer.find_by(id: c3.id)
-        # puts "AFTER"
-        # p m1
-        # p c3
-        # puts
+        @m1_avail_inv_after = (Movie.find_by(id: m1.id)).available_inventory
+        @c3_movie_count_after = (Customer.find_by(id: c3.id)).movies_checked_out_count
       end
       
       it "creates Rental instance with correct attribs" do
@@ -38,12 +31,12 @@ describe RentalsController do
       end
       
       it "updates movie's available_inventory correctly" do
-        expect(m1.available_inventory).must_equal m1.inventory - 1
-        expect(m1.available_inventory).must_equal @m1_avail_inv_before - 1
+        expect(@m1_avail_inv_after).must_equal @m1_avail_inv_before - 1
       end
       
       it "updates customer's movies_checked_out_count correctly" do
-        expect(c3.movies_checked_out_count).must_equal @c3_movie_count_before + 1
+        ### WHY???!!! Postman still passed! I also manually tested in rails console!
+        expect(@c3_movie_count_after).must_equal @c3_movie_count_before + 1
       end
       
       it "returns success status & JSON with expected message" do
@@ -82,10 +75,10 @@ describe RentalsController do
         expect(body["error_msgs"]).must_equal bad_rental.errors.full_messages
       end
       
-
+      
       it "if rental.save unsuccessful due to nonexistent movie, return error msg in JSON and bad_request status" do
         nil_movie_hash = {movie_id: nil, customer_id: c3.id}
-
+        
         bad_rental = Rental.create(nil_movie_hash)
         
         post check_out_path, params: nil_movie_hash
