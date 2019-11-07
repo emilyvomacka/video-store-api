@@ -6,7 +6,7 @@ c1:
   postal_code: 12345
   phone: 1-800-whatevr
   registered_at: 2019-01-01
-  movies_checked_out_count: 1
+  movies_checked_out_count: 0
 
 c2:
   name: ned flanders
