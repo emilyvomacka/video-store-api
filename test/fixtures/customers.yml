@@ -6,6 +6,7 @@ c1:
   postal_code: 12345
   phone: 1-800-whatevr
   registered_at: 2019-01-01
+  movies_checked_out_count: 1
 
 c2:
   name: ned flanders
@@ -15,6 +16,7 @@ c2:
   postal_code: 12345
   phone: 1-800-diddly
   registered_at: 2018-12-25
+  movies_checked_out_count: 2
 
 c3:
   name: ted flanders
@@ -24,3 +26,4 @@ c3:
   postal_code: 12345
   phone: 1-800-diddly
   registered_at: 2018-12-25
+  movies_checked_out_count: 3
