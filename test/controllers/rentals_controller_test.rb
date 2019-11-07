@@ -49,7 +49,7 @@ describe RentalsController do
       
     end
     
-    describe "edge" do
+    describe "edge cases" do
       it "if movie's available_inventory = 0, return error msg in JSON and bad_request status" do
         m1.update!(available_inventory: 0)
         
@@ -96,13 +96,39 @@ describe RentalsController do
   
   describe "CHECK_IN" do
     
-    describe "nominal" do
-    end
-    
-    describe "edge" do
-      it "if movie has already been returned" do
+    describe "successful check-ins with valid inputs" do
+      
+      it "will not add new rental instances" do
+        # TODO
       end
+      
+      it "will increment movie.available_inventory by 1" do
+        # TODO
+      end
+      
+      it "will not decrease customer's movies_checked_out by 1" do
+        # TODO
+      end
+      
+      it "returns success status & JSON with expected message" do
+        # TODO
+      end
+      
     end
     
+    describe "edge cases" do
+      it "if rental doesn't exist, return error msg in JSON and bad_request status" do
+        # TODO
+        # render json: { errors: "Rental doesn't exist" }, status: :bad_request
+        
+      end      
+      
+      it "if movie has already been returned" do
+        # TODO
+        # render json: { errors: "Rental has already been returned" }, status: :bad_request
+        
+      end
+      
+    end
   end
 end
