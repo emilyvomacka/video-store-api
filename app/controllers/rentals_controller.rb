@@ -8,6 +8,7 @@ class RentalsController < ApplicationController
     new_rental.returned = false
     
     # does this movie (if existing) even have available_inventory?
+    ### EMILY!!! Can we make this part of Rental model validations?  IDK if it's bad SRP practice...
     movie = new_rental.movie
     if movie && movie.available_inventory <= 0
       render json: { errors: "Cannot make a rental because movie #{movie.title.capitalize} ran out of copies"}, status: :bad_request
@@ -26,7 +27,7 @@ class RentalsController < ApplicationController
       # prep API JSON
       render json: { msg: "Rental id #{this_rental.id}: #{this_rental.movie.title} due on #{this_rental.due_date}"}, status: :ok
     else
-      # if movie and/or customer don't exist
+      # failed Rental validations: if movie and/or customer don't exist
       render json: { errors: "Cannot make a rental", error_msgs: new_rental.errors.full_messages }, status: :bad_request
     end
     
