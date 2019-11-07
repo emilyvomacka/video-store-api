@@ -24,7 +24,7 @@ class RentalsController < ApplicationController
       customer.update(movies_checked_out_count: customer.movies_checked_out_count + 1)
       
       # prep API JSON
-      render json: { msg: "Rental id#{this_rental.id}: #{this_rental.movie.title} due on #{this_rental.due_date}"}, status: :ok
+      render json: { msg: "Rental id #{this_rental.id}: #{this_rental.movie.title} due on #{this_rental.due_date}"}, status: :ok
     else
       render json: { errors: "Cannot make a rental", error_msgs: new_rental.errors.full_messages }, status: :bad_request
     end
@@ -46,7 +46,7 @@ class RentalsController < ApplicationController
       this_customer.update(movies_checked_out_count: this_customer.movies_checked_out_count - 1)
       this_movie = rental.movie
       this_movie.update(available_inventory: this_movie.available_inventory + 1)
-      this_movie.update(returned: true)
+      rental.update(returned: true)
       render json: { msg: "Rental id#{rental.id}: #{rental.movie.title} has been returned." }, status: :ok
     end 
   end
