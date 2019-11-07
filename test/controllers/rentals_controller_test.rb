@@ -13,7 +13,7 @@ describe RentalsController do
         @rental_count_before = Rental.count
         @m1_avail_inv_before = m1.available_inventory
         @c3_movie_count_before = c3.movies_checked_out_count
-
+        
         post check_out_path, params: {movie_id: m1.id, customer_id: c3.id}
       end
       
@@ -35,7 +35,6 @@ describe RentalsController do
       
       it "updates customer's movies_checked_out_count correctly" do
         @c3_movie_count_after = (Customer.find_by(id: c3.id)).movies_checked_out_count
-        ### WHY???!!! Postman still passed! I also manually tested in rails console!
         expect(@c3_movie_count_after).must_equal @c3_movie_count_before + 1
       end
       
