@@ -39,22 +39,28 @@ describe CustomersController do
     
     describe "additional query parameters" do
       describe "does query parameter sort work?" do
-        it "with valid input, respond w/ correct JSON and status" do
-          get customers_path, params: { sort: "name" }
+        it "with each valid input, respond w/ correct JSON and status" do
+          # testing all 3 of these choices
+          choices = %w[name registered_at postal_code]
           
-          check_response(expected_type: Array)
-          
-          body = JSON.parse(response.body)
-          expect(body.count).must_equal Customer.count
-          
-          body.each do |customer|
-            expect(customer).must_be_instance_of Hash
-            expect(customer.keys.sort).must_equal CUSTOMER_KEYS
-          end
-          
-          # checking alphabetical order
-          (body.count-1).times do |i|
-            assert(body[i]["name"] < body[i+1]["name"])
+          choices.each do |choice|
+            get customers_path, params: { sort: choice }
+            
+            check_response(expected_type: Array)
+            
+            body = JSON.parse(response.body)
+            expect(body.count).must_equal Customer.count
+            
+            body.each do |customer|
+              expect(customer).must_be_instance_of Hash
+              expect(customer.keys.sort).must_equal CUSTOMER_KEYS
+            end
+            
+            # checking order of name/registerd_at/postal_code
+            # why <= and not just <?  bc the timestamps are the same bc computer's fast
+            (body.count-1).times do |i|
+              assert(body[i][choice] <= body[i+1][choice])
+            end
           end
         end
         
@@ -72,11 +78,11 @@ describe CustomersController do
             expect(customer.keys.sort).must_equal CUSTOMER_KEYS
           end
         end
-
-        it "if no customers exist, responds with check status and request body" do
+        
+        it "if no customers exist but valid input, responds with check status and request body" do
           Customer.destroy_all
           
-          get customers_path, params: { sort: "garbage"}
+          get customers_path, params: { sort: "name"}
           
           body = JSON.parse(response.body)
           expect(body.count).must_equal Customer.count
@@ -86,12 +92,21 @@ describe CustomersController do
       end
       
       describe "does query parameter combo n&p work?" do
-        it "with valid input, respond w/ correct JSON and status" do
+        it "with valid inputs, respond w/ correct JSON and status" do
         end
         
         it "with invalid inputs, respond w/ default JSON of all customers and success status" do 
         end
         
+        it "if no customers exist but valid input, responds with check status and request body" do
+          Customer.destroy_all
+          
+          get customers_path, params: { n: "10", p: "10"}
+          
+          body = JSON.parse(response.body)
+          expect(body.count).must_equal Customer.count
+          expect(body).must_equal []
+        end
       end
       
       describe "does query parameter super combo of sort AND n&p work?" do
