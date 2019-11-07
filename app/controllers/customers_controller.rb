@@ -11,9 +11,14 @@ class CustomersController < ApplicationController
     end
     
     if params[:n] && params[:p]
-      # I think these 2 query params are used together? otherwise p by itself makes no sense
-      # TODO
+      limit_amt = params[:n].to_i
+      offset_amt = (params[:p].to_i - 1) * limit_amt
+      
+      customers = customers.limit(limit_amt).offset(offset_amt)
     end
+    
+    # validations on query parameters? none... 
+    # will just generate regular Customer.all if bogus params given for sort/n/p
     
     render json: customers.as_json( only: CUSTOMER_KEYS), status: :ok
   end 
