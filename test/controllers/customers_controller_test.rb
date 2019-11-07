@@ -25,8 +25,15 @@ describe CustomersController do
       
     end
     
-    it "edge case: check status and request body" do
-      # None for index
+    it "if no customers exist, responds with check status and request body" do
+      Customer.destroy_all
+      
+      get customers_path
+      
+      check_response(expected_type: Array)
+      body = JSON.parse(response.body)
+      expect(body.count).must_equal Customer.count
+      expect(body).must_equal []
     end
   end
   
