@@ -7,9 +7,9 @@ class RentalsController < ApplicationController
     new_rental.due_date = Date.today + 7.days
     new_rental.returned = false
     
-    # does this movie even have available_inventory?
+    # does this movie (if existing) even have available_inventory?
     movie = new_rental.movie
-    if movie.available_inventory <= 0
+    if movie && movie.available_inventory <= 0
       render json: { errors: "Cannot make a rental because movie #{movie.title.capitalize} ran out of copies"}, status: :bad_request
       return
     end
@@ -19,13 +19,14 @@ class RentalsController < ApplicationController
       # update movie's avail count
       movie.update(available_inventory: movie.available_inventory - 1)
       
-      # update custoemr's checked_out_count
+      # update customer's checked_out_count
       customer = this_rental.customer
       customer.update(movies_checked_out_count: customer.movies_checked_out_count + 1)
       
       # prep API JSON
       render json: { msg: "Rental id #{this_rental.id}: #{this_rental.movie.title} due on #{this_rental.due_date}"}, status: :ok
     else
+      # if movie and/or customer don't exist
       render json: { errors: "Cannot make a rental", error_msgs: new_rental.errors.full_messages }, status: :bad_request
     end
     
