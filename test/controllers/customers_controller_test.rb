@@ -152,9 +152,11 @@ describe CustomersController do
       
       describe "does query parameter super combo of sort AND n&p work?" do
         it "with valid input, respond w/ correct JSON and status" do
+          # TODO, wanted to focus on making other extra functionalities instead
         end
         
         it "with invalid inputs, respond w/ default JSON of all customers and success status" do 
+          # TODO, wanted to focus on making other extra functionalities instead
         end
         
       end
