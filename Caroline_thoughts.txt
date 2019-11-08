@@ -10,15 +10,20 @@ GET /rentals/overdue
   with optionA, I search Customer for all those who has movies_checked_out_count > 0,
   then iterate thru and find customerInstance.rentals where returned: false && due_date < today
 
+###
 GET /movies/:id/current
   I vote for Option A, same reason
+  Go through movieInstance.rentals, where returned: false 
 
 GET /movies/:id/history 
-  Go through movieInstance.rentals, where returned: true (bc IN THE PAST)
-  WAIT... no I think it's BOTH returned: true/false... it doesn't matter if it's been returned or not
+  Go through movieInstance.rentals, where returned: true 
+###
 
+
+###
 GET /customers/:id/current
   Go through customerInstance.rentals, get all the ones with returned: false
 
 GET /customers/:id/history
   Go through customerInstance.rentals, get all the ones with returned: true
+###

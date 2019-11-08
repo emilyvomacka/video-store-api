@@ -1,7 +1,7 @@
 class MoviesController < ApplicationController
-
+  
   MOVIE_KEYS = [:id, :title, :overview, :release_date, :inventory, :available_inventory]
-
+  
   def index
     movies = Movie.all 
     
@@ -29,6 +29,13 @@ class MoviesController < ApplicationController
     end
     return movie.id
   end
+  
+  def current
+    # sends list of customers who've checked out a specific movie right now
+    render json: { msg: "TODO" }, status: :ok
+    
+  end
+  
   
   def history
     # sends list of customers who've checked out a specific movie in the past
