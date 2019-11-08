@@ -54,6 +54,16 @@ class ApplicationController < ActionController::API
     return array_of_objs
   end
   
+  def render_error_json(msg: "An error has occurred, please call customer service 1-800-LOL-WHAT")
+    render json: { error: msg}, status: :bad_request
+    return
+  end
+  
+  def render_error_json_bad_query_params
+    render_error_json(msg: "Nothing to show you b/c of bad query parameters")
+    return
+  end
+  
   def get_db_object(model:)
     # gets & evals the params[:id] from URL request, returns either a JSON error msg or an actual customer instance
     if params[:id].match? (/^\d+$/)   # only accept chars of 0..9

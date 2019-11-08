@@ -52,7 +52,7 @@ class MoviesController < ApplicationController
       render json: current_rentals, status: :ok
       return
     else 
-      render json: { error: "Nothing to show you b/c of bad query parameters"}, status: :bad_request
+      render_error_json_bad_query_params
       return    
     end
   end
@@ -70,7 +70,7 @@ class MoviesController < ApplicationController
       render json: past_rentals, status: :ok
       return
     else
-      render json: { error: "Nothing to show you b/c of bad query parameters"}, status: :bad_request
+      render_error_json_bad_query_params
       return
     end
   end
