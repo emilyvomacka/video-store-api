@@ -4,10 +4,11 @@ customerInstance.movies_checked_out_count
 
 
 GET /rentals/overdue
-  Option A: go through each customer? find customerInstance.rentals where returned: false && due_date < today
-  Option B: go through each rental?
-  I think Option A is best, b/c with optionB we might repeat the iteration for the same customer(s),
-  whereas with optionA, as soon as that customer gets added to the JSON, we can move on to next customer
+  Option A: go through each affected customer? 
+  Option B: go through each rental? No b/c worse time complexity
+  
+  with optionA, I search Customer for all those who has movies_checked_out_count > 0,
+  then iterate thru and find customerInstance.rentals where returned: false && due_date < today
 
 GET /movies/:id/current
   I vote for Option A, same reason
