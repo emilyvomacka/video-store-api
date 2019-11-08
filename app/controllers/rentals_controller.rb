@@ -30,6 +30,7 @@ class RentalsController < ApplicationController
       return
     else
       # failed Rental validations: if movie and/or customer don't exist
+      # Caroline! I like the idea of putting these messages up front. :)
       render json: { errors: "Cannot make a rental", error_msgs: new_rental.errors.full_messages }, status: :bad_request
       return
     end
@@ -52,6 +53,7 @@ class RentalsController < ApplicationController
       this_movie = rental.movie
       this_movie.update(available_inventory: this_movie.available_inventory + 1)
       rental.update(returned: true)
+
       render json: { msg: "Rental id#{rental.id}: #{rental.movie.title} has been returned." }, status: :ok
       return
     end 
