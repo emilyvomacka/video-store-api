@@ -1,6 +1,6 @@
 require "test_helper"
 
-MOVIE_SHOW_KEYS = (%w[id name postal_code phone registered_at movies_checked_out_count]).sort
+MOVIE_SHOW_KEYS = (%w[id title overview release_date inventory available_inventory]).sort
 MOVIE_INDEX_KEYS = (%w[id title release_date]).sort
 
 describe MoviesController do
@@ -36,24 +36,47 @@ describe MoviesController do
   end
   
   describe "SHOW" do
-    it "basic test w/ no parameters, if applicable" do
+    
+    let (:m1) {movies(:m1) }
+    
+    it "responds with JSON, success, and a movie hash" do
+      get movie_path(m1)
+      body = check_response(expected_type: Hash)
+      expect(body.keys.sort).must_equal MOVIE_SHOW_KEYS
     end
     
-    it "nominal case: check status and request body" do
-    end
-    
-    it "edge case: check status and request body" do
+    it "will respond ok with an error JSON when movie not found" do
+      Movie.destroy_all
+      get movie_path(-1)
+      body = check_response(expected_type: Hash)
+      expect(body.keys).must_equal ["errors"]
+      expect(body.values).must_equal ["Movie not found"]
+      must_respond_with :success
     end
   end
   
   describe "CREATE" do
-    it "basic test w/ no parameters, if applicable" do
-    end
     
-    it "nominal case: check status and request body" do
-    end
+    it "creates a movie with correct params" do
+      prev_movie_count = Movie.count
+      movie_params = { title: "test movie", inventory: 10, overview: "fascinating", release_date: "2019-10-01" } 
+      post movies_path, params: movie_params
+      must_respond_with :success
+
+      expect(Movie.count).must_equal prev_movie_count + 1
+      
+      new_movie = Movie.last
+      expect(new_movie.title).must_equal "test movie"
+      expect(new_movie.inventory).must_equal 10
+      expect(new_movie.overview).must_equal "fascinating"
+      expect(new_movie.release_date.to_s).must_equal "2019-10-01"
+      expect(new_movie.available_inventory).must_equal 10
+    end 
     
-    it "edge case: check status and request body" do
-    end
+    it "returns bad_request when movie cannot be created" do
+      bad_params = { movie: { title: "bad movie", inventory: -24 } } 
+      expect{post movies_path, params: bad_params}.wont_change 'Movie.count'
+      must_respond_with :bad_request
+    end 
   end
 end
