@@ -22,4 +22,12 @@ class ApplicationController < ActionController::API
       return
     end
   end
+  
+  def get_active_rentals_from(instance:)
+    return instance.rentals.select { |rental| !rental.returned }
+  end
+  
+  def get_past_rentals_from(instance:)
+    return instance.rentals.select { |rental| rental.returned }
+  end
 end

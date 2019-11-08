@@ -34,18 +34,14 @@ class MoviesController < ApplicationController
   
   def current
     # sends list of customers who've checked out a specific movie right now
-    current_rentals = @movie.rentals.select { |rental| 
-      !rental.returned
-    }
+    current_rentals = get_active_rentals_from(instance: @movie)
     render json: current_rentals, status: :ok
     return    
   end
   
   def history
     # sends list of customers who've checked out a specific movie in the past
-    past_rentals = @movie.rentals.select { |rental| 
-      rental.returned
-    }
+    past_rentals = get_past_rentals_from(instance: @movie)
     render json: past_rentals, status: :ok
     return
   end

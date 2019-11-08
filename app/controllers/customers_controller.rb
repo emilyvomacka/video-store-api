@@ -40,10 +40,7 @@ class CustomersController < ApplicationController
   def current
     # Go through customerInstance.rentals, get all the ones with returned: false
     # @customer is from before_action get_customer()
-    
-    current_rentals = @customer.rentals.select { |rental| 
-      !rental.returned
-    }
+    current_rentals = get_active_rentals_from(instance: @customer)
     render json: current_rentals, status: :ok
     return
   end
@@ -51,9 +48,7 @@ class CustomersController < ApplicationController
   def history
     #  Go through customerInstance.rentals, get all the ones with returned: true
     # @customer is from before_action get_customer()
-    past_rentals = @customer.rentals.select { |rental| 
-      rental.returned
-    }
+    past_rentals = get_past_rentals_from(instance: @customer)
     render json: past_rentals, status: :ok
     return
   end
