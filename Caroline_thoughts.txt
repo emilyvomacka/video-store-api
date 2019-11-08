@@ -15,6 +15,7 @@ GET /movies/:id/current
 
 GET /movies/:id/history 
   Go through movieInstance.rentals, where returned: true (bc IN THE PAST)
+  WAIT... no I think it's BOTH returned: true/false... it doesn't matter if it's been returned or not
 
 GET /customers/:id/current
   Go through customerInstance.rentals, get all the ones with returned: false

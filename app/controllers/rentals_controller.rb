@@ -61,6 +61,9 @@ class RentalsController < ApplicationController
     # HOW DO I SEARCH FOR >0 ???? 
     possible_customers = Customer.where(movies_checked_out_count: 1)
     overdue_customers = []
+    render json: { msg: "Still working out the kinks" }, status: :ok
+    return
+    
     
     ### ALSO this doesn't work lol
     possible_customers.each do |customer| 

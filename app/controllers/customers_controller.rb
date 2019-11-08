@@ -36,5 +36,16 @@ class CustomersController < ApplicationController
     return
   end 
   
+  def current
+    #   Go through customerInstance.rentals, get all the ones with returned: false
+    render json: { msg: "TODO" }, status: :ok
+    
+  end
+  
+  def history
+    #  Go through customerInstance.rentals, get all the ones with returned: true
+    render json: { msg: "TODO" }, status: :ok
+    
+  end
   
 end

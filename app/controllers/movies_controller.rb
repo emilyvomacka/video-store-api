@@ -28,6 +28,12 @@ class MoviesController < ApplicationController
     return movie.id
   end
   
+  def history
+    # sends list of customers who've checked out a specific movie in the past
+    render json: { msg: "TODO" }, status: :ok
+    
+  end
+  
   private
   
   def movie_params
