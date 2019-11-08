@@ -60,21 +60,8 @@ class CustomersController < ApplicationController
   
   private
   def get_customer
-    # gets & evals the params[:id] from URL request, returns either a JSON error msg or an actual customer instance
     ### in order for the found customer to be accessible, I *HAD* to add the @ in front of it, idk why
-    if params[:id].match? (/^\d+$/)   # only accept chars of 0..9
-      @customer = Customer.find_by(id: params[:id].to_i)
-      
-      if @customer.nil?
-        render json: { error: "No customer match for id# #{params[:id]}" }, status: :bad_request
-        return
-      end
-      
-    else
-      # regex match failed, params[:id] can't even be an integer
-      render json: { error: "That id# #{params[:id]} is not even valid"}, status: :bad_request
-      return
-    end
+    @customer = get_db_object(model: Customer)
   end
   
 end

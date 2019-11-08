@@ -57,20 +57,7 @@ class MoviesController < ApplicationController
   end
   
   def get_movie
-    # gets & evals the params[:id] from URL request, returns either a JSON error msg or an actual movie instance
     ### in order for the found movie to be accessible, I *HAD* to add the @ in front of it, idk why
-    if params[:id].match? (/^\d+$/)   # only accept chars of 0..9
-      @movie = Movie.find_by(id: params[:id].to_i)
-      
-      if @movie.nil?
-        render json: { error: "No movie match for id# #{params[:id]}" }, status: :bad_request
-        return
-      end
-      
-    else
-      # regex match failed, params[:id] can't even be an integer
-      render json: { error: "That id# #{params[:id]} is not even valid"}, status: :bad_request
-      return
-    end
+    @movie = get_db_object(model: Movie)
   end
 end
