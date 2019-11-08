@@ -7,31 +7,24 @@ class RentalsController < ApplicationController
     new_rental.due_date = Date.today + 7.days
     new_rental.returned = false
     
-    # does this movie (if existing) even have available_inventory?
-    ### EMILY!!! Can we make this part of Rental model validations?  IDK if it's bad SRP practice...
-    ### I think we'll have to look into custom model validations if we do that...
-    movie = new_rental.movie
-    if movie.nil? || movie.available_inventory <= 0
-      render json: { errors: "Cannot make a rental because movie #{movie.title.capitalize} ran out of copies"}, status: :bad_request
+    if new_rental.movie.nil? || new_rental.customer.nil?
+      render json: { errors: "Cannot make a rental", error_msgs: new_rental.errors.full_messages }, status: :bad_request
+      return
+    elsif new_rental.movie.available_inventory <= 0
+      render json: { errors: "Cannot make a rental because movie #{new_rental.movie.title.capitalize} ran out of copies"}, status: :bad_request
       return
     end
-    
+
     if new_rental.save
       this_rental = Rental.last
-      movie.update(available_inventory: movie.available_inventory - 1)
-      
-      # update customer's checked_out_count
-      customer = this_rental.customer
-      customer.update(movies_checked_out_count: customer.movies_checked_out_count + 1)
-      
-      # prep API JSON
+      this_rental.movie.update(available_inventory: this_rental.movie.available_inventory - 1)
+      this_rental.customer.update(movies_checked_out_count: this_rental.customer.movies_checked_out_count + 1)
       render json: { msg: "Rental id #{this_rental.id}: #{this_rental.movie.title} due on #{this_rental.due_date}"}, status: :ok
       return
     else
       render json: { errors: "Cannot make a rental", error_msgs: new_rental.errors.full_messages }, status: :bad_request
       return
     end
-    
   end
   
   def check_in

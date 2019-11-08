@@ -37,7 +37,7 @@ class MoviesController < ApplicationController
       render json: { msg: "Movie #{movie.title.capitalize} added to database", id: Movie.last.id }, status: :ok
       return
     else
-      render_error_json(errors: "Cannot add movie", error_msgs: movie.errors.full_messages)
+      render_errors_json(error: "Cannot add movie", error_msgs: movie.errors.full_messages)
       return
     end
   end

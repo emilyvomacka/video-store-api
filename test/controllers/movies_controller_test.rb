@@ -48,10 +48,9 @@ describe MoviesController do
     it "will respond ok with an error JSON when movie not found" do
       Movie.destroy_all
       get movie_path(-1)
-      body = check_response(expected_type: Hash)
-      expect(body.keys).must_equal ["errors"]
+      body = check_response(expected_type: Hash, expected_status: :bad_request)
+      expect(body.keys).must_equal ["error"]
       expect(body.values).must_equal ["Movie not found"]
-      must_respond_with :success
     end
   end
   
