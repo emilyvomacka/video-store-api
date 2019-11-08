@@ -22,8 +22,10 @@ class MoviesController < ApplicationController
     
     if movie
       render json: movie.as_json( only: MOVIE_KEYS), status: :ok
+      return
     else
       render_error_json(error: "Movie not found")
+      return
     end
   end
   
@@ -33,10 +35,14 @@ class MoviesController < ApplicationController
     
     if movie.save
       render json: { msg: "Movie #{movie.title.capitalize} added to database", id: Movie.last.id }, status: :ok
+      return
     else
-      render json: { errors: "Cannot add movie", error_msgs: movie.errors.full_messages }, status: :bad_request
+      render_error_json(errors: "Cannot add movie", error_msgs: movie.errors.full_messages)
+      return
     end
-    return movie.id
+    
+    ## is this line necessary? 
+    # return movie.id
   end
   
   def current
