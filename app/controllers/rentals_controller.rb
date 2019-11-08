@@ -9,10 +9,10 @@ class RentalsController < ApplicationController
     
     if new_rental.movie.nil? || new_rental.customer.nil?
       new_rental.valid?
-      render json: { errors: "Cannot make a rental", error_msgs: new_rental.errors.full_messages }, status: :bad_request
+      render_errors_json(error: "Cannot make a rental", error_msgs: new_rental.errors.full_messages )
       return
     elsif new_rental.movie.available_inventory <= 0
-      render json: { errors: "Cannot make a rental because movie #{new_rental.movie.title.capitalize} ran out of copies"}, status: :bad_request
+      render_errors_json(error: "Cannot make a rental because movie #{new_rental.movie.title.capitalize} ran out of copies")
       return
     end
     
@@ -23,7 +23,7 @@ class RentalsController < ApplicationController
       render json: { msg: "Rental id #{this_rental.id}: #{this_rental.movie.title} due on #{this_rental.due_date}"}, status: :ok
       return
     else
-      render json: { errors: "Cannot make a rental", error_msgs: new_rental.errors.full_messages }, status: :bad_request
+      render_errors_json(error: "Cannot make a rental", error_msgs: new_rental.errors.full_messages)
       return
     end
   end
@@ -31,10 +31,10 @@ class RentalsController < ApplicationController
   def check_in
     rental = Rental.find_by(movie_id: rental_params[:movie_id].to_i, customer_id: rental_params[:customer_id].to_i)
     if rental.nil?
-      render json: { errors: "Rental doesn't exist" }, status: :bad_request
+      render_errors_json(error:  "Rental doesn't exist" )
       return 
     elsif rental.returned == true
-      render json: { errors: "Rental has already been returned" }, status: :bad_request
+      render_errors_json(error: "Rental has already been returned" )
       return
     else 
       rental.customer.movies_checked_out_update(-1)

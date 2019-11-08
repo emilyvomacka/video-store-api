@@ -35,7 +35,7 @@ describe RentalsController do
       end
       
       it "updates customer's movies_checked_out_count correctly" do
-
+        
         expect(@c3_movie_count_after).must_equal @c3_movie_count_before + 1
       end
       
@@ -55,7 +55,7 @@ describe RentalsController do
         expect{post check_out_path, params: {movie_id: m1.id, customer_id: c3.id}}.wont_change "Rental.count"
         body = check_response(expected_type: Hash, expected_status: :bad_request)
         
-        expect(body.keys).must_equal ["errors"]
+        expect(body.keys).must_equal ["error"]
         expect(body.values).must_equal ["Cannot make a rental because movie #{m1.title.capitalize} ran out of copies"]
       end
       
@@ -67,8 +67,8 @@ describe RentalsController do
         
         body = check_response(expected_type: Hash, expected_status: :bad_request)
         
-        expect(body.keys.sort).must_equal ["error_msgs", "errors"]
-        expect(body["errors"]).must_equal "Cannot make a rental"
+        expect(body.keys.sort).must_equal ["error", "error_msgs"]
+        expect(body["error"]).must_equal "Cannot make a rental"
         expect(body["error_msgs"]).must_equal bad_rental.errors.full_messages
       end
       
@@ -83,8 +83,8 @@ describe RentalsController do
         check_response(expected_type: Hash, expected_status: :bad_request)
         
         body = JSON.parse(response.body)
-        expect(body.keys.sort).must_equal ["error_msgs", "errors"]
-        expect(body["errors"]).must_equal "Cannot make a rental"
+        expect(body.keys.sort).must_equal ["error", "error_msgs"]
+        expect(body["error"]).must_equal "Cannot make a rental"
         expect(body["error_msgs"]).must_equal bad_rental.errors.full_messages
       end
     end
@@ -126,7 +126,7 @@ describe RentalsController do
       
       body = check_response(expected_type: Hash, expected_status: :bad_request)
       
-      expect(body.keys).must_equal ["errors"]
+      expect(body.keys).must_equal ["error"]
       expect(body.values).must_equal ["Rental has already been returned"]
     end      
     
@@ -137,7 +137,7 @@ describe RentalsController do
       
       body = check_response(expected_type: Hash, expected_status: :bad_request)
       
-      expect(body.keys).must_equal ["errors"]
+      expect(body.keys).must_equal ["error"]
       expect(body.values).must_equal ["Rental doesn't exist"]
     end
   end
