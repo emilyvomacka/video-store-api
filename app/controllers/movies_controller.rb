@@ -42,6 +42,12 @@ class MoviesController < ApplicationController
   def current
     # sends list of customers who've checked out a specific movie right now
     current_rentals = get_active_rentals_from(instance: @movie)
+    
+    ### NOT SURE WHAT I MESSED UP HERE...
+    # if @approved_params
+    #   current_rentals = apply_query_params(array_of_objs: current_rentals, approved_params: @approved_params)
+    # end
+    
     render json: current_rentals, status: :ok
     return    
   end
@@ -49,6 +55,12 @@ class MoviesController < ApplicationController
   def history
     # sends list of customers who've checked out a specific movie in the past
     past_rentals = get_past_rentals_from(instance: @movie)
+    
+    ### NOT SURE WHAT I MESSED UP HERE...
+    # if @approved_params
+    #   past_rentals = apply_query_params(array_of_objs: past_rentals, approved_params: @approved_params)
+    # end
+    
     render json: past_rentals, status: :ok
     return
   end
