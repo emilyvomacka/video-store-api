@@ -8,13 +8,14 @@ class RentalsController < ApplicationController
     new_rental.returned = false
     
     if new_rental.movie.nil? || new_rental.customer.nil?
+      new_rental.valid?
       render json: { errors: "Cannot make a rental", error_msgs: new_rental.errors.full_messages }, status: :bad_request
       return
     elsif new_rental.movie.available_inventory <= 0
       render json: { errors: "Cannot make a rental because movie #{new_rental.movie.title.capitalize} ran out of copies"}, status: :bad_request
       return
     end
-
+    
     if new_rental.save
       this_rental = Rental.last
       this_rental.movie.update(available_inventory: this_rental.movie.available_inventory - 1)

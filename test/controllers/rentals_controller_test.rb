@@ -54,7 +54,7 @@ describe RentalsController do
         
         expect{post check_out_path, params: {movie_id: m1.id, customer_id: c3.id}}.wont_change "Rental.count"
         body = check_response(expected_type: Hash, expected_status: :bad_request)
-
+        
         expect(body.keys).must_equal ["errors"]
         expect(body.values).must_equal ["Cannot make a rental because movie #{m1.title.capitalize} ran out of copies"]
       end
@@ -66,7 +66,7 @@ describe RentalsController do
         post check_out_path, params: nil_customer_hash
         
         body = check_response(expected_type: Hash, expected_status: :bad_request)
-
+        
         expect(body.keys.sort).must_equal ["error_msgs", "errors"]
         expect(body["errors"]).must_equal "Cannot make a rental"
         expect(body["error_msgs"]).must_equal bad_rental.errors.full_messages
@@ -98,12 +98,12 @@ describe RentalsController do
     let (:m2) { movies(:m2) }
     let (:r2) { rentals(:r2) }
     let (:check_in_params) { {movie_id: m1.id, customer_id: c2.id} }
-
+    
     before do
       @m1_starting_avail_inventory = m1.available_inventory
       @c2_starting_movies_co_count = c2.movies_checked_out_count
     end 
-
+    
     it "successfully checks in a checked-out movie" do       
       expect{ post check_in_path, params: check_in_params }.wont_change Rental.count
       c2.reload
@@ -121,22 +121,22 @@ describe RentalsController do
     
     it "if rental has already been returned, return error msg in JSON with :bad_request status" do
       bad_params = { movie_id: m1.id, customer_id: c1.id}
-
+      
       post check_in_path, params: bad_params
       
       body = check_response(expected_type: Hash, expected_status: :bad_request)
-
+      
       expect(body.keys).must_equal ["errors"]
       expect(body.values).must_equal ["Rental has already been returned"]
     end      
     
     it "if rental doesn't exist, return error msg in JSON with :bad_request status" do
       bad_params = { movie_id: m2.id, customer_id: c2.id }
-
+      
       post check_in_path, params: bad_params
-
+      
       body = check_response(expected_type: Hash, expected_status: :bad_request)
-
+      
       expect(body.keys).must_equal ["errors"]
       expect(body.values).must_equal ["Rental doesn't exist"]
     end
