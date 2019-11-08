@@ -43,26 +43,36 @@ class MoviesController < ApplicationController
     # sends list of customers who've checked out a specific movie right now
     current_rentals = get_active_rentals_from(instance: @movie)
     
-    ### NOT SURE WHAT I MESSED UP HERE...
-    # if @approved_params
-    #   current_rentals = apply_query_params(array_of_objs: current_rentals, approved_params: @approved_params)
-    # end
+    if @approved_params
+      # any kind of params[:sort] declared by user would just be redundant and have zero effect
+      current_rentals = apply_query_params(array_of_objs: current_rentals, approved_params: @approved_params)
+    end
     
-    render json: current_rentals, status: :ok
-    return    
+    if current_rentals
+      render json: current_rentals, status: :ok
+      return
+    else 
+      render json: { error: "Nothing to show you b/c of bad query parameters"}, status: :bad_request
+      return    
+    end
   end
   
   def history
     # sends list of customers who've checked out a specific movie in the past
     past_rentals = get_past_rentals_from(instance: @movie)
     
-    ### NOT SURE WHAT I MESSED UP HERE...
-    # if @approved_params
-    #   past_rentals = apply_query_params(array_of_objs: past_rentals, approved_params: @approved_params)
-    # end
+    if @approved_params
+      # any kind of params[:sort] declared by user would just be redundant and have zero effect
+      past_rentals = apply_query_params(array_of_objs: past_rentals, approved_params: @approved_params)
+    end
     
-    render json: past_rentals, status: :ok
-    return
+    if past_rentals
+      render json: past_rentals, status: :ok
+      return
+    else
+      render json: { error: "Nothing to show you b/c of bad query parameters"}, status: :bad_request
+      return
+    end
   end
   
   private

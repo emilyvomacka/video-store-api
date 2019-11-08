@@ -57,3 +57,6 @@ group :test do
   gem 'minitest-rails'
   gem 'minitest-reporters'
 end
+
+# Supposed to help, but couldn't get it to work on stuff retrieved from db
+gem 'will_paginate', '~> 3.1.0'

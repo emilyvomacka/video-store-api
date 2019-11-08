@@ -15,12 +15,12 @@ class ApplicationController < ActionController::API
     if params[:n] && params[:p]
       if (params[:n].match? (/^\d+$/)) && (params[:p].match? (/^\d+$/))
         # only valid integers will make it to this point
-        limit_amt = params[:n].to_i
-        offset_amt = (params[:p].to_i - 1) * limit_amt
+        per_page = params[:n].to_i
+        page = params[:p].to_i
         
-        if (limit_amt > 0) && (offset_amt >= 0)
-          approved_params[:limit_amt] = limit_amt
-          approved_params[:offset_amt] = offset_amt
+        if (per_page > 0) && (page > 0)
+          approved_params[:per_page] = per_page
+          approved_params[:page] = page
         else
           render json: { errors: "Invalid n & p combo" }, status: :bad_request
           return
@@ -37,10 +37,14 @@ class ApplicationController < ActionController::API
   def apply_query_params(array_of_objs:, approved_params:)
     
     # do this first to lower amount to sort later
-    if approved_params[:limit_amt] && approved_params[:offset_amt]
-      limit_amt = approved_params[:limit_amt]
-      offset_amt = approved_params[:offset_amt]
-      array_of_objs = array_of_objs.limit(limit_amt).offset(offset_amt)
+    if approved_params[:per_page] && approved_params[:page]
+      # could NOT get will_paginate gem to work, does it only talk directly to db? and not on stuff retrieved from db?
+      # array_of_objs = array_of_objs.paginate(page: approved_params[:page], per_page: approved_params[:per_page])
+      
+      # doing it old school
+      index_of_first_target = approved_params[:per_page] * (approved_params[:page]-1)
+      index_of_last_target = index_of_first_target + approved_params[:per_page] - 1
+      array_of_objs = array_of_objs[index_of_first_target..index_of_last_target]
     end
     
     if approved_params[:sort]
