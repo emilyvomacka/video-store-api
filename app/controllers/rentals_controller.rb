@@ -18,8 +18,8 @@ class RentalsController < ApplicationController
     
     if new_rental.save
       this_rental = Rental.last
-      this_rental.movie.update(available_inventory: this_rental.movie.available_inventory - 1)
-      this_rental.customer.update(movies_checked_out_count: this_rental.customer.movies_checked_out_count + 1)
+      this_rental.movie.available_inventory_update(-1)
+      this_rental.customer.movies_checked_out_update(1)
       render json: { msg: "Rental id #{this_rental.id}: #{this_rental.movie.title} due on #{this_rental.due_date}"}, status: :ok
       return
     else
@@ -37,8 +37,8 @@ class RentalsController < ApplicationController
       render json: { errors: "Rental has already been returned" }, status: :bad_request
       return
     else 
-      rental.customer.update(movies_checked_out_count: rental.customer.movies_checked_out_count - 1)
-      rental.movie.update(available_inventory: rental.movie.available_inventory + 1)
+      rental.customer.movies_checked_out_update(-1)
+      rental.movie.available_inventory_update(1)
       rental.update(returned: true)
       render json: { msg: "Rental id #{rental.id}: #{rental.movie.title} has been returned." }, status: :ok
       return
