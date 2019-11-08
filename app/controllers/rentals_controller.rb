@@ -27,9 +27,11 @@ class RentalsController < ApplicationController
       
       # prep API JSON
       render json: { msg: "Rental id #{this_rental.id}: #{this_rental.movie.title} due on #{this_rental.due_date}"}, status: :ok
+      return
     else
       # failed Rental validations: if movie and/or customer don't exist
       render json: { errors: "Cannot make a rental", error_msgs: new_rental.errors.full_messages }, status: :bad_request
+      return
     end
     
   end
@@ -51,7 +53,15 @@ class RentalsController < ApplicationController
       this_movie.update(available_inventory: this_movie.available_inventory + 1)
       rental.update(returned: true)
       render json: { msg: "Rental id#{rental.id}: #{rental.movie.title} has been returned." }, status: :ok
+      return
     end 
+  end
+  
+  def overdue
+    affected_customers = Customers.where(movies_checked_out_count: 1)
+    
+    render json: affected_customers.as_json ( only: :name), status: :ok
+    return
   end
   
   private

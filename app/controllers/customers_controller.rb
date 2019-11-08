@@ -16,7 +16,6 @@ class CustomersController < ApplicationController
     end
     
     if params[:n] && params[:p]
-      # validation not complete
       if (params[:n].respond_to? :to_i) && (params[:p].respond_to? :to_i)
         limit_amt = params[:n].to_i
         offset_amt = (params[:p].to_i - 1) * limit_amt
@@ -36,5 +35,6 @@ class CustomersController < ApplicationController
     render json: customers.as_json( only: CUSTOMER_KEYS), status: :ok
     return
   end 
+  
   
 end
