@@ -36,12 +36,7 @@ class ApplicationController < ActionController::API
   
   def apply_query_params(array_of_objs:, approved_params:)
     
-    # do this first to lower amount to sort later
     if approved_params[:per_page] && approved_params[:page]
-      # could NOT get will_paginate gem to work, does it only talk directly to db? and not on stuff retrieved from db?
-      # array_of_objs = array_of_objs.paginate(page: approved_params[:page], per_page: approved_params[:per_page])
-      
-      # doing it old school
       index_of_first_target = approved_params[:per_page] * (approved_params[:page]-1)
       index_of_last_target = index_of_first_target + approved_params[:per_page] - 1
       array_of_objs = array_of_objs[index_of_first_target..index_of_last_target]
@@ -54,7 +49,7 @@ class ApplicationController < ActionController::API
     return array_of_objs
   end
   
-  def render_error_json(error: "An error has occurred, please call customer service 1-800-LOL-WHAT", error_msgs: nil)
+  def render_errors_json(error: "An error has occurred, please call customer service 1-800-LOL-WHAT", error_msgs: nil)
     if error_msgs 
       render json: { error: error, error_msgs: error_msgs }, status: :bad_request
       return
@@ -70,8 +65,7 @@ class ApplicationController < ActionController::API
   end
   
   def get_db_object(model:)
-    # gets & evals the params[:id] from URL request, returns either a JSON error msg or an actual customer instance
-    if params[:id].match? (/^\d+$/)   # only accept chars of 0..9
+    if params[:id].match? (/^\d+$/) 
       object = model.find_by(id: params[:id].to_i)
       
       if object.nil?
@@ -82,7 +76,6 @@ class ApplicationController < ActionController::API
       end
       
     else
-      # regex match failed, params[:id] can't even be an integer
       render json: { error: "That id# #{params[:id]} is not even valid"}, status: :bad_request
       return
     end

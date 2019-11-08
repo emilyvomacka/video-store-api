@@ -72,7 +72,7 @@ describe RentalsController do
       
       
       it "if rental.save unsuccessful due to nonexistent movie, return error msg in JSON and bad_request status" do
-        nil_movie_hash = {movie_id: nil, customer_id: c3.id}
+        nil_movie_hash = {movie_id: -2, customer_id: c3.id}
         
         bad_rental = Rental.create(nil_movie_hash)
         
@@ -102,8 +102,7 @@ describe RentalsController do
       @c2_starting_movies_co_count = c2.movies_checked_out_count
     end 
 
-    it "successfully checks in a checked-out movie" do  
-      # skip     
+    it "successfully checks in a checked-out movie" do       
       expect{ post check_in_path, params: check_in_params }.wont_change Rental.count
       c2.reload
       expect(c2.movies_checked_out_count).must_equal @c2_starting_movies_co_count - 1

@@ -24,7 +24,7 @@ class MoviesController < ApplicationController
       render json: movie.as_json( only: MOVIE_KEYS), status: :ok
       return
     else
-      render_error_json(error: "Movie not found")
+      render_errors_json(error: "Movie not found")
       return
     end
   end
@@ -37,20 +37,15 @@ class MoviesController < ApplicationController
       render json: { msg: "Movie #{movie.title.capitalize} added to database", id: Movie.last.id }, status: :ok
       return
     else
-      render_error_json(errors: "Cannot add movie", error_msgs: movie.errors.full_messages)
+      render_errors_json(error: "Cannot add movie", error_msgs: movie.errors.full_messages)
       return
     end
-    
-    ## is this line necessary? 
-    # return movie.id
   end
   
   def current
-    # sends list of customers who've checked out a specific movie right now
     current_rentals = get_active_rentals_from(instance: @movie)
     
     if @approved_params
-      # any kind of params[:sort] declared by user would just be redundant and have zero effect
       current_rentals = apply_query_params(array_of_objs: current_rentals, approved_params: @approved_params)
     end
     
