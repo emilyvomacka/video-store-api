@@ -1,5 +1,7 @@
 class MoviesController < ApplicationController
-  
+
+  MOVIE_KEYS = [:id, :title, :overview, :release_date, :inventory, :available_inventory]
+
   def index
     movies = Movie.all 
     
@@ -10,7 +12,7 @@ class MoviesController < ApplicationController
     movie = Movie.find_by(id: params[:id])
     
     if movie
-      render json: movie.as_json( only: [:id, :title, :overview, :release_date, :inventory, :available_inventory]), status: :ok
+      render json: movie.as_json( only: MOVIE_KEYS), status: :ok
     else
       render json: { errors: "Movie not found" }, status: :ok
     end
