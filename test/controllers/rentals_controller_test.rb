@@ -99,7 +99,7 @@ describe RentalsController do
     let (:check_in_params) { {movie_id: m1.id, customer_id: c2.id} }
 
     it "successfully checks in a checked-out movie" do  
-      skip     
+      # skip     
       assert_difference ->{ c2.movies_checked_out_count } => -1, ->{ m1.available_inventory } => 1, ->{ Rental.count } => 0 do
         post check_in_path, params: check_in_params 
       end
