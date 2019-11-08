@@ -58,19 +58,15 @@ class RentalsController < ApplicationController
   end
   
   def overdue
-    # HOW DO I SEARCH FOR >0 ???? 
-    possible_customers = Customer.where(movies_checked_out_count: 1)
+    possible_customers = Customer.where("movies_checked_out_count > ?", 0)
     overdue_customers = []
-    render json: { msg: "Still working out the kinks" }, status: :ok
-    return
     
-    
-    ### ALSO this doesn't work lol
     possible_customers.each do |customer| 
       customer.rentals.each do |rental|
         unless rental.returned
           if rental.due_date.to_date < Date.today
             overdue_customers << customer
+            # break out of this enumerable loop & move on to next customer
             break
           end
         end

@@ -1,7 +1,4 @@
 ###### THOUGHTS... 
-customerInstance.movies_checked_out_count
-  Go through customerInstance.rentals, count all the ones with returned: false
-
 
 GET /rentals/overdue
   Option A: go through each affected customer? 
@@ -27,3 +24,5 @@ GET /customers/:id/current
 GET /customers/:id/history
   Go through customerInstance.rentals, get all the ones with returned: true
 ###
+
+! Can probably refactor out some more between the prev 4 GET lines...
