@@ -98,12 +98,18 @@ describe RentalsController do
     let (:r2) { rentals(:r2) }
     let (:check_in_params) { {movie_id: m1.id, customer_id: c2.id} }
 
+    before do
+      @m1_starting_avail_inventory = m1.available_inventory
+      @c2_starting_movies_co_count = c2.movies_checked_out_count
+    end 
+
     it "successfully checks in a checked-out movie" do  
       # skip     
-      assert_difference ->{ c2.movies_checked_out_count } => -1, ->{ m1.available_inventory } => 1, ->{ Rental.count } => 0 do
-        post check_in_path, params: check_in_params 
-      end
-
+      expect{ post check_in_path, params: check_in_params }.wont_change Rental.count
+      c2.reload
+      expect(c2.movies_checked_out_count).must_equal @c2_starting_movies_co_count - 1
+      m1.reload
+      expect(m1.available_inventory).must_equal @m1_starting_avail_inventory + 1
       expect(r2.returned).must_equal true 
     end 
     
