@@ -5,22 +5,36 @@ class CustomersController < ApplicationController
   def index
     customers = Customer.all 
     
-    if ["name", "registered_at", "postal_code"].include? params[:sort]
-      choice = params[:sort].to_sym
-      customers = Customer.all.order(choice => :asc)
+    if params[:sort]
+      if ["name", "registered_at", "postal_code"].include? params[:sort]
+        choice = params[:sort].to_sym
+        customers = Customer.all.order(choice => :asc)
+      else 
+        render json: { errors: "Can't sort anything with that key" }, status: :bad_request
+        return
+      end
     end
     
     if params[:n] && params[:p]
-      limit_amt = params[:n].to_i
-      offset_amt = (params[:p].to_i - 1) * limit_amt
-      
-      customers = customers.limit(limit_amt).offset(offset_amt)
+      # validation not complete
+      if (params[:n].respond_to? :to_i) && (params[:p].respond_to? :to_i)
+        limit_amt = params[:n].to_i
+        offset_amt = (params[:p].to_i - 1) * limit_amt
+        
+        if (limit_amt > 0) && (offset_amt > 0)
+          customers = customers.limit(limit_amt).offset(offset_amt)
+        else
+          render json: { errors: "Invalid n & p combo" }, status: :bad_request
+          return
+        end
+      end
+    elsif params[:n] || params[:p]
+      render json: { errors: "We require both n and p, not just one of them" }, status: :bad_request
+      return
     end
     
-    # validations on query parameters? none... 
-    # will just generate regular Customer.all if bogus params given for sort/n/p
-    
     render json: customers.as_json( only: CUSTOMER_KEYS), status: :ok
+    return
   end 
   
 end
