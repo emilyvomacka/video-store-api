@@ -23,7 +23,7 @@ class MoviesController < ApplicationController
     if movie
       render json: movie.as_json( only: MOVIE_KEYS), status: :ok
     else
-      render json: { errors: "Movie not found" }, status: :ok
+      render_error_json(error: "Movie not found")
     end
   end
   

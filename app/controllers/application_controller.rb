@@ -54,13 +54,18 @@ class ApplicationController < ActionController::API
     return array_of_objs
   end
   
-  def render_error_json(msg: "An error has occurred, please call customer service 1-800-LOL-WHAT")
-    render json: { error: msg}, status: :bad_request
-    return
+  def render_error_json(error: "An error has occurred, please call customer service 1-800-LOL-WHAT", error_msgs: nil)
+    if error_msgs 
+      render json: { error: error, error_msgs: error_msgs }, status: :bad_request
+      return
+    else
+      render json: { error: error }, status: :bad_request
+      return
+    end
   end
   
   def render_error_json_bad_query_params
-    render_error_json(msg: "Nothing to show you b/c of bad query parameters")
+    render_error_json(error: "Nothing to show you b/c of bad query parameters")
     return
   end
   
