@@ -62,7 +62,7 @@ describe MoviesController do
       movie_params = { title: "test movie", inventory: 10, overview: "fascinating", release_date: "2019-10-01" } 
       post movies_path, params: movie_params
       must_respond_with :success
-
+      
       expect(Movie.count).must_equal prev_movie_count + 1
       
       new_movie = Movie.last
@@ -77,6 +77,10 @@ describe MoviesController do
       bad_params = { movie: { title: "bad movie", inventory: -24 } } 
       expect{post movies_path, params: bad_params}.wont_change 'Movie.count'
       must_respond_with :bad_request
+      
+      body = JSON.parse(response.body)
+      expect(body["errors"]).must_equal "Cannot add movie"
+      assert(body["error_msgs"])
     end 
   end
 end
