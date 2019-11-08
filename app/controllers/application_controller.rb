@@ -1,7 +1,53 @@
 class ApplicationController < ActionController::API
   
-  def apply_query_params
-    # refactor the query params into here...
+  def validate_query_params(acceptable_keys:)
+    approved_params = {}
+    
+    if params[:sort]
+      if acceptable_keys.include? params[:sort]
+        approved_params[:sort] = params[:sort]
+      else 
+        render json: { errors: "Can't sort anything with key of #{params[:sort]}" }, status: :bad_request
+        return
+      end
+    end
+    
+    if params[:n] && params[:p]
+      if (params[:n].match? (/^\d+$/)) && (params[:p].match? (/^\d+$/))
+        # only valid integers will make it to this point
+        limit_amt = params[:n].to_i
+        offset_amt = (params[:p].to_i - 1) * limit_amt
+        
+        if (limit_amt > 0) && (offset_amt >= 0)
+          approved_params[:limit_amt] = limit_amt
+          approved_params[:offset_amt] = offset_amt
+        else
+          render json: { errors: "Invalid n & p combo" }, status: :bad_request
+          return
+        end
+      end
+    elsif params[:n] || params[:p]
+      render json: { errors: "We require both n and p, not just one of them" }, status: :bad_request
+      return
+    end
+    
+    return approved_params
+  end
+  
+  def apply_query_params(array_of_objs:, approved_params:)
+    
+    # do this first to lower amount to sort later
+    if approved_params[:limit_amt] && approved_params[:offset_amt]
+      limit_amt = approved_params[:limit_amt]
+      offset_amt = approved_params[:offset_amt]
+      array_of_objs = array_of_objs.limit(limit_amt).offset(offset_amt)
+    end
+    
+    if approved_params[:sort]
+      array_of_objs = array_of_objs.sort_by{ |obj| obj[approved_params[:sort].to_s] }
+    end
+    
+    return array_of_objs
   end
   
   def get_db_object(model:)

@@ -3,11 +3,18 @@ class MoviesController < ApplicationController
   MOVIE_KEYS = [:id, :title, :overview, :release_date, :inventory, :available_inventory]
   
   before_action :get_movie, only: [:current, :history]
+  before_action :get_query_params, only: [:index, :current, :history]
   
   def index
-    movies = Movie.all 
+    
+    if @approved_params
+      movies = apply_query_params(array_of_objs: Movie.all, approved_params: @approved_params)
+    else
+      movies = Movie.all 
+    end
     
     render json: movies.as_json( only: [:id, :title, :release_date]), status: :ok
+    return
   end
   
   def show
@@ -55,5 +62,9 @@ class MoviesController < ApplicationController
   def get_movie
     ### in order for the found movie to be accessible, I *HAD* to add the @ in front of it, idk why
     @movie = get_db_object(model: Movie)
+  end
+  
+  def get_query_params
+    @approved_params = validate_query_params(acceptable_keys: ["title", "release_date"])
   end
 end
