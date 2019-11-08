@@ -1,4 +1,5 @@
 require "test_helper"
+require 'pry'
 
 describe RentalsController do
   describe "CHECK_OUT" do

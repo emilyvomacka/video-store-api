@@ -7,7 +7,6 @@ describe CustomersController do
   describe "INDEX" do
     it "responds with JSON and success status" do
       get customers_path
-      
       check_response(expected_type: Array)
     end
     
