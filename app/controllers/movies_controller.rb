@@ -2,6 +2,8 @@ class MoviesController < ApplicationController
   
   MOVIE_KEYS = [:id, :title, :overview, :release_date, :inventory, :available_inventory]
   
+  before_action :get_movie, only: [:current, :history]
+  
   def index
     movies = Movie.all 
     
@@ -32,20 +34,43 @@ class MoviesController < ApplicationController
   
   def current
     # sends list of customers who've checked out a specific movie right now
-    render json: { msg: "TODO" }, status: :ok
-    
+    current_rentals = @movie.rentals.select { |rental| 
+      !rental.returned
+    }
+    render json: current_rentals, status: :ok
+    return    
   end
-  
   
   def history
     # sends list of customers who've checked out a specific movie in the past
-    render json: { msg: "TODO" }, status: :ok
-    
+    past_rentals = @movie.rentals.select { |rental| 
+      rental.returned
+    }
+    render json: past_rentals, status: :ok
+    return
   end
   
   private
   
   def movie_params
     return params.permit(:title, :overview, :release_date, :inventory)
+  end
+  
+  def get_movie
+    # gets & evals the params[:id] from URL request, returns either a JSON error msg or an actual movie instance
+    ### in order for the found movie to be accessible, I *HAD* to add the @ in front of it, idk why
+    if params[:id].match? (/^\d+$/)   # only accept chars of 0..9
+      @movie = Movie.find_by(id: params[:id].to_i)
+      
+      if @movie.nil?
+        render json: { error: "No movie match for id# #{params[:id]}" }, status: :bad_request
+        return
+      end
+      
+    else
+      # regex match failed, params[:id] can't even be an integer
+      render json: { error: "That id# #{params[:id]} is not even valid"}, status: :bad_request
+      return
+    end
   end
 end
