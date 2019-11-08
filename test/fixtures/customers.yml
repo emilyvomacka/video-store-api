@@ -6,7 +6,7 @@ c1:
   postal_code: 12345
   phone: 1-800-whatevr
   registered_at: 2019-01-01
-  movies_checked_out_count: 1
+  movies_checked_out_count: 0
 
 c2:
   name: ned flanders
@@ -16,14 +16,14 @@ c2:
   postal_code: 12345
   phone: 1-800-4444
   registered_at: 2018-12-25
-  movies_checked_out_count: 2
+  movies_checked_out_count: 1
 
 c3:
-  name: ted flanders
+  name: principal skinners
   address: 124 real st
   city: springfield
   state: IL
   postal_code: 12345
-  phone: 1-800-fiddly
+  phone: 1-800-school1
   registered_at: 2018-12-25
-  movies_checked_out_count: 3
+  movies_checked_out_count: 0

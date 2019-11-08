@@ -27,10 +27,12 @@ class RentalsController < ApplicationController
       
       # prep API JSON
       render json: { msg: "Rental id #{this_rental.id}: #{this_rental.movie.title} due on #{this_rental.due_date}"}, status: :ok
+      return
     else
       # failed Rental validations: if movie and/or customer don't exist
       # Caroline! I like the idea of putting these messages up front. :)
       render json: { errors: "Cannot make a rental", error_msgs: new_rental.errors.full_messages }, status: :bad_request
+      return
     end
     
   end
@@ -51,8 +53,30 @@ class RentalsController < ApplicationController
       this_movie = rental.movie
       this_movie.update(available_inventory: this_movie.available_inventory + 1)
       rental.update(returned: true)
-      render json: { msg: "Rental id #{rental.id}: #{rental.movie.title} has been returned." }, status: :ok
+
+      render json: { msg: "Rental id#{rental.id}: #{rental.movie.title} has been returned." }, status: :ok
+      return
     end 
+  end
+  
+  def overdue
+    possible_customers = Customer.where("movies_checked_out_count > ?", 0)
+    overdue_customers = []
+    
+    possible_customers.each do |customer| 
+      customer.rentals.each do |rental|
+        unless rental.returned
+          if rental.due_date.to_date < Date.today
+            overdue_customers << customer
+            # break out of this enumerable loop & move on to next customer
+            break
+          end
+        end
+      end
+    end
+    
+    render json: overdue_customers, status: :ok
+    return 
   end
   
   private
