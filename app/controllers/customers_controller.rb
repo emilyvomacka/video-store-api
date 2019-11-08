@@ -11,7 +11,7 @@ class CustomersController < ApplicationController
         choice = params[:sort].to_sym
         customers = Customer.all.order(choice => :asc)
       else 
-        render json: { errors: "Can't sort anything with that key" }, status: :bad_request
+        render_errors_json(error: "Can't sort anything with that key")
         return
       end
     end
@@ -24,12 +24,12 @@ class CustomersController < ApplicationController
         if (limit_amt > 0) && (offset_amt > 0)
           customers = customers.limit(limit_amt).offset(offset_amt)
         else
-          render json: { errors: "Invalid n & p combo" }, status: :bad_request
+          render_errors_json(error: "Invalid n & p combo" )
           return
         end
       end
     elsif params[:n] || params[:p]
-      render json: { errors: "We require both n and p, not just one of them" }, status: :bad_request
+      render_errors_json(error: "We require both n and p, not just one of them" )
       return
     end
     

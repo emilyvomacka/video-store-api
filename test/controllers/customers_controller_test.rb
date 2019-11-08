@@ -72,7 +72,7 @@ describe CustomersController do
           check_response(expected_type: Hash, expected_status: :bad_request)
           
           body = JSON.parse(response.body)
-          expect(body["errors"]).must_equal "Can't sort anything with that key"
+          expect(body["error"]).must_equal "Can't sort anything with that key"
         end
         
         it "if no customers exist but valid input, responds with check status and request body" do
@@ -118,7 +118,7 @@ describe CustomersController do
             check_response(expected_type: Hash, expected_status: :bad_request)
             
             body = JSON.parse(response.body)
-            expect(body["errors"]).must_equal "We require both n and p, not just one of them"
+            expect(body["error"]).must_equal "We require both n and p, not just one of them"
           end
         end
         
@@ -135,7 +135,7 @@ describe CustomersController do
             check_response(expected_type: Hash, expected_status: :bad_request)
             
             body = JSON.parse(response.body)
-            expect(body["errors"]).must_equal "Invalid n & p combo"
+            expect(body["error"]).must_equal "Invalid n & p combo"
           end
         end
         
