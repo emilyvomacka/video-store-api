@@ -25,6 +25,8 @@ class ApplicationController < ActionController::API
           render json: { errors: "Invalid n & p combo" }, status: :bad_request
           return
         end
+      else
+        render json: { errors: "Invalid n or p query parameter(s)" }, status: :bad_request
       end
     elsif params[:n] || params[:p]
       render json: { errors: "We require both n and p, not just one of them" }, status: :bad_request
